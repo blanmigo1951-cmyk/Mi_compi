@@ -3,7 +3,11 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Inicializamos el cliente apuntando a la infraestructura de Groq
+const groq = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: 'https://api.groq.com/openai/v1',
+});
 
 export async function fixCodeWithAI(
   language: string,
@@ -22,8 +26,8 @@ export async function fixCodeWithAI(
   ${sourceCode}
   `;
 
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
+  const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile', // Modelo ultra rápido de Groq
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.1,
   });
